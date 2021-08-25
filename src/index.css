@@ -1,0 +1,69 @@
+:root {
+  --working: #ccc;
+  --success: #155724;
+  --error: #721c24;
+  --notice: #856404;
+  --grey: #f8f8f8;
+  --border: #ddd;
+  --divider: #aeaeae;
+  --boxshadow: 0 1px 8px 0 rgba(0, 0, 0, 0.04);
+  --primarycolor: #43c6db;
+  --secondarycolor: #db5843;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body,
+div {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  background-color: #eee;
+}
+
+div,
+form {
+  width: 100%;
+}
+
+button {
+  font-family: inherit;
+  display: inline-block;
+  border: none;
+  padding: 1rem 2rem;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0;
+  padding: 10px 7.5px 11px 7.5px;
+  border-radius: 3px;
+  border: 1px solid var(--primarycolor);
+  width: 100%;
+  background-color: var(--primarycolor);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+button:hover {
+  background-color: var(--secondarycolor);
+  border-color: var(--secondarycolor);
+}
