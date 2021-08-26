@@ -1,3 +1,6 @@
+export const CONTRACT_ADDRESS = "0x4282711AE0877EF13000F8D61ba91a8B6967E5ec"; // ropsten
+export const CHAIN_ID = 3; // ropsten
+
 export function isFieldError(array, val) {
   return array.includes(val);
 }
@@ -49,37 +52,8 @@ const months = [
 ];
 
 const days = [
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23,
-  24,
-  25,
-  26,
-  27,
-  28,
-  29,
-  30,
-  31,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+  23, 24, 25, 26, 27, 28, 29, 30, 31,
 ];
 
 export function monthsSelect() {

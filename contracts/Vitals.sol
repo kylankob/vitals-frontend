@@ -3,18 +3,15 @@
 pragma solidity ^0.8.0;
 
 contract Vitals {
-  string hash; /*state variable, written to blockchain*/
+  string[] hashes;
 
-  mapping (address => string) public records;
+  mapping (address => string[]) public records;
 
   function set(string memory _hash) public {
-    /*hash = _hash;*/
-    records[msg.sender] = _hash;
+    records[msg.sender].push(_hash);
   }
 
-  /* not needed b/c of records
-    function get() public view returns (string memory) {
-      return records[msg.sender];
-    }
-  */
+  function get(address _address) public view returns (string[] memory) {
+    return records[_address];
+  }
 }

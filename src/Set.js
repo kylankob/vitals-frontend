@@ -21,7 +21,8 @@ const App = () => {
 
   useEffect(() => {
     if (getValFromLS("patient", true)) {
-      handleStatus(3);
+      //handleStatus(3);
+      handleStatus(2);
     } else if (getValFromLS("patient")) {
       const patient = getValFromLS("patient");
       setValToLS("patient", patient, true);
@@ -31,7 +32,7 @@ const App = () => {
 
   const handleStatus = (status) => {
     setStatus(status);
-    if (status === 1 || status === 2 || status === 3) {
+    if (status === 1 || status === 2 || status === 3 || status === 4) {
       setForm("");
     }
   };

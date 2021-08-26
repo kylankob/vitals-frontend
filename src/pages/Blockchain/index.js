@@ -3,7 +3,12 @@ import styled from "styled-components";
 import { create } from "ipfs-http-client";
 import { ethers } from "ethers";
 import Vitals from "../../abis/Vitals.json";
-import { getValFromLS, setValToLS } from "../../utils";
+import {
+  CONTRACT_ADDRESS,
+  CHAIN_ID,
+  getValFromLS,
+  setValToLS,
+} from "../../utils";
 import Msg from "../../components/Msg";
 import Submit from "../../components/Submit";
 import { Form, FormMsgSubmit } from "../../styled";
@@ -12,6 +17,7 @@ import {
   faFileCheck,
   faChevronCircleRight,
   faCheckCircle,
+  faTimesCircle,
   faCircleNotch,
 } from "@fortawesome/pro-light-svg-icons";
 
@@ -21,8 +27,6 @@ const client = create({
   port: 5001,
   protocol: "https",
 });
-
-const vitalsAddress = "0xA51F488caffa8415486dBCc5937a79515F319bc6"; // ropsten
 
 async function requestAccount() {
   await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -43,8 +47,13 @@ const Blockchain = () => {
       setLoading(false);
 
       const patient = JSON.parse(getValFromLS("patient", true));
-      const vitals = JSON.parse(getValFromLS("vitals", true));
-      setData({ ...patient, ...vitals });
+      if (getValFromLS("vitals", true)) {
+        const vitals = JSON.parse(getValFromLS("vitals", true));
+        setData({ type: "vitals", ...patient, ...vitals });
+      } else if (getValFromLS("vaccine", true)) {
+        const vaccine = JSON.parse(getValFromLS("vaccine", true));
+        setData({ type: "vaccine", ...patient, ...vaccine });
+      }
     }
   }, []);
 
@@ -68,15 +77,25 @@ const Blockchain = () => {
     if (typeof window.ethereum !== "undefined") {
       await requestAccount();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(vitalsAddress, Vitals.abi, signer);
-      const transaction = await contract.set(added.path);
-      await transaction.wait();
-      setResult2({
-        added: 1,
-      });
+      const { chainId } = await provider.getNetwork();
 
-      //setValToLS("vitals", null, true)
+      if (chainId === CHAIN_ID) {
+        // check if on correct network
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          Vitals.abi,
+          signer
+        );
+        const transaction = await contract.set(added.path);
+        await transaction.wait();
+        setResult2(1);
+
+        setValToLS("vitals", null, true);
+        setValToLS("vaccine", null, true);
+      } else {
+        setResult2(0);
+      }
     }
 
     /*
@@ -154,15 +173,22 @@ const Blockchain = () => {
             </a>
           </p>
 
-          {result2.added === 1 ? (
+          {result2 === 1 ? (
             <S.Status>
               <FontAwesomeIcon icon={faCheckCircle} size="lg" />
               <span>File hash added to the blockchain.</span>
             </S.Status>
-          ) : result2.added === 2 ? (
+          ) : result2 === 2 ? (
             <S.Status className="working">
-              <FontAwesomeIcon icon={faCircleNotch} size="lg" />
+              <FontAwesomeIcon icon={faCircleNotch} size="lg" spin />
               <span>Waiting on transaction confirmaton...</span>
+            </S.Status>
+          ) : result2 === 0 ? (
+            <S.Status className="error">
+              <FontAwesomeIcon icon={faTimesCircle} size="lg" />
+              <span>
+                Must be on Ropsten testnet to interact with this smart contract.
+              </span>
             </S.Status>
           ) : null}
         </Fragment>
@@ -191,21 +217,35 @@ const Blockchain = () => {
                   <br />
                   {data.race}
                 </td>
-                <td>
-                  {data.temperature}
-                  <br />
-                  {data.heartrate}
-                  <br />
-                  {data.pulse}
-                  <br />
-                  {data.bloodpressure}
-                  <br />
-                  {data.respiratoryrate}
-                  <br />
-                  {data.oxygensaturation}
-                  <br />
-                  {data.ph}
-                </td>
+                {data.type === "vitals" ? (
+                  <td>
+                    {data.temperature}
+                    <br />
+                    {data.heartrate}
+                    <br />
+                    {data.pulse}
+                    <br />
+                    {data.bloodpressure}
+                    <br />
+                    {data.respiratoryrate}
+                    <br />
+                    {data.oxygensaturation}
+                    <br />
+                    {data.ph}
+                  </td>
+                ) : (
+                  <td>
+                    {data.vaccine}
+                    <br />
+                    {data.date}
+                    <br />
+                    {data.manufacturer}
+                    <br />
+                    {data.lot}
+                    <br />
+                    {data.provider}
+                  </td>
+                )}
               </tr>
             </tbody>
           </S.Table>
@@ -267,6 +307,10 @@ S.Status = styled.div`
 
   &.working {
     color: var(--working);
+  }
+
+  &.error {
+    color: var(--error);
   }
 
   & > span {

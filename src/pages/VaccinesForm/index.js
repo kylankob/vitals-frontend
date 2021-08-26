@@ -106,7 +106,7 @@ const VaccinesForm = ({ update }) => {
 
     setValToLS("vaccine", JSON.stringify(vaccine), true);
 
-    update(1);
+    update(2);
   };
 
   return (
@@ -129,15 +129,15 @@ const VaccinesForm = ({ update }) => {
               name: "--",
             },
             {
-              value: "first",
+              value: "First Dose",
               name: "First Dose",
             },
             {
-              value: "second",
+              value: "Second Dose",
               name: "Second Dose",
             },
             {
-              value: "booster",
+              value: "Booster Shot",
               name: "Booster Shot",
             },
           ]}
@@ -212,7 +212,7 @@ const VaccinesForm = ({ update }) => {
       <S.FormMsgSubmit>
         {msg.type && <Msg data={msg} />}
         {msg.type !== "working" && (
-          <Submit name="Save Vaccine" icon={faChevronCircleRight} />
+          <Submit name="Continue to Blockchain" icon={faChevronCircleRight} />
         )}
       </S.FormMsgSubmit>
     </S.Form>

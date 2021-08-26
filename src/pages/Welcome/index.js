@@ -1,4 +1,5 @@
 import { useState, useRef, Fragment } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   monthsSelect,
@@ -103,10 +104,13 @@ const Welcome = ({ status, update }) => {
       setValToLS("patient", JSON.stringify(patient));
     }
 
+    setErrors([]);
+    setMsg({});
     update(3);
   };
 
   const handleSignout = () => {
+    setNames({});
     setValToLS("patient", null, true);
     setValToLS("patient", null);
     update(4);
@@ -118,7 +122,9 @@ const Welcome = ({ status, update }) => {
         <div>Loading...</div>
       ) : status === 3 || status === 2 || status === 1 ? (
         <S.SignedIn>
-          <span>Patient: {getName()}</span>
+          <span>
+            Patient: <Link to="/me">{getName()}</Link>
+          </span>
           <button type="button" onClick={() => handleSignout()}>
             Sign Out
           </button>

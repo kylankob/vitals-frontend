@@ -30,3 +30,5 @@ cache
 notes
 
 .npmrc
+# Local Netlify folder
+.netlify

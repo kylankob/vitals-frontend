@@ -41,6 +41,15 @@ form {
   width: 100%;
 }
 
+a {
+  text-decoration: none;
+  color: var(--primarycolor);
+}
+
+a:hover {
+  color: var(--secondarycolor);
+}
+
 button {
   font-family: inherit;
   display: inline-block;
